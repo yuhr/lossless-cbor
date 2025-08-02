@@ -68,7 +68,7 @@ namespace fromValue {
 	) => DataItem | Promise<DataItem>
 }
 
-fromValue.fromNumber = (async (value, options): Promise<DataItem.Float> => {
+fromValue.fromNumber = (async (value, options = {}): Promise<DataItem.Float> => {
 	return DataItem({
 		type: "float",
 		value,
@@ -82,7 +82,7 @@ fromValue.fromNumber = (async (value, options): Promise<DataItem.Float> => {
 
 fromValue.fromBigInt = (async (
 	value,
-	options,
+	options = {},
 ): Promise<DataItem.Integer | DataItem.Tag<2n | 3n, DataItem.ByteString>> => {
 	let negative = false
 	let argument = value
@@ -114,7 +114,7 @@ fromValue.fromBigInt = (async (
 	}
 }) satisfies fromValue.Transformer<bigint>
 
-fromValue.fromBlob = (async (blob: Blob, options): Promise<DataItem.ByteString> => {
+fromValue.fromBlob = (async (blob, options = {}): Promise<DataItem.ByteString> => {
 	const argument = BigInt(blob.size)
 	return DataItem({
 		type: "bstr",
@@ -292,7 +292,7 @@ const enumerateObjectTransformerFor = function* (
 	throw new Error("unreachable")
 }
 
-fromValue.fromObject = (async (value, options) => {
+fromValue.fromObject = (async (value, options = {}) => {
 	if (value === null) return await fromValue.fromNull(value, options)
 	const objectTransformers = enumerateObjectTransformerFor(value, options.objectTransformers)
 	for (const objectTransformer of objectTransformers) return await objectTransformer(value, options)
@@ -301,7 +301,7 @@ fromValue.fromObject = (async (value, options) => {
 
 const textEncoder = new TextEncoder()
 
-fromValue.fromString = (async (value, options) => {
+fromValue.fromString = (async (value, options = {}) => {
 	const bytes = textEncoder.encode(value)
 	const argument = BigInt(bytes.length)
 	return DataItem({
@@ -315,7 +315,7 @@ fromValue.fromString = (async (value, options) => {
 	})
 }) satisfies fromValue.Transformer<string>
 
-fromValue.fromBoolean = (async (value, options) => {
+fromValue.fromBoolean = (async (value, options = {}) => {
 	const argument = value ? 21n : 20n
 	return DataItem({
 		type: "simple",
@@ -328,7 +328,7 @@ fromValue.fromBoolean = (async (value, options) => {
 	})
 }) satisfies fromValue.Transformer<boolean>
 
-fromValue.fromNull = (async (value, options) => {
+fromValue.fromNull = (async (value, options = {}) => {
 	const argument = 22n
 	return DataItem({
 		type: "simple",
@@ -341,7 +341,7 @@ fromValue.fromNull = (async (value, options) => {
 	})
 }) satisfies fromValue.Transformer<null>
 
-fromValue.fromUndefined = (async (value, options) => {
+fromValue.fromUndefined = (async (value, options = {}) => {
 	const argument = 23n
 	return DataItem({
 		type: "simple",
@@ -354,11 +354,11 @@ fromValue.fromUndefined = (async (value, options) => {
 	})
 }) satisfies fromValue.Transformer<undefined>
 
-fromValue.fromSymbol = (async (value, options) => {
+fromValue.fromSymbol = (async (value, options = {}) => {
 	throw new Error("There's no defined way to transform `Symbol` to data item.")
 }) satisfies fromValue.Transformer<symbol>
 
-fromValue.fromFunction = (async (value, options) => {
+fromValue.fromFunction = (async (value, options = {}) => {
 	return fromValue.fromObject(value, options)
 }) satisfies fromValue.Transformer<Function>
 
