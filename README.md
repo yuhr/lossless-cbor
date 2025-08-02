@@ -76,14 +76,14 @@ config:
     }
 ---
 graph LR
-	B0((<a href="./src/ByteSource.ts">ByteSource</a>))
+	B0((ByteSource))
 	B1((Uint8Array))
-	D((<a href="./src/DataItem.ts">DataItem</a>))
+	D((DataItem))
 	V0((unknown))
 	V1((string))
-	D -->|<a href="./src/diagnose.ts">diagnose</a>| V1
-	B0 -->|<a href="./src/fromBytes.ts">fromBytes</a>| D -->|<a href="./src/toValue.ts">toValue</a>| V0
-	V0 -->|<a href="./src/fromValue.ts">fromValue</a>| D -->|<a href="./src/toBytes.ts">toBytes</a>| B1
+	D -->|diagnose| V1
+	B0 -->|fromBytes| D -->|toValue| V0
+	V0 -->|fromValue| D -->|toBytes| B1
 ```
 
 ## SemVer Policy
