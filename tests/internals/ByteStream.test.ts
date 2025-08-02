@@ -1,0 +1,42 @@
+import { ByteStream } from ".../internals/ByteStream.ts"
+import { assertEquals } from "@std/assert"
+
+Deno.test("`ByteStream`", async ({ step }) => {
+	await step("handle empty input", async ({ step }) => {
+		const stream = new ByteStream().terminate()
+		const read = await stream.read(1)
+		assertEquals(read, undefined)
+	})
+	await step("unread when insufficient", async ({ step }) => {
+		const stream = new ByteStream(Uint8Array.of(0, 1, 2, 3)).terminate()
+		const read_0 = await stream.read(2)
+		const read_1 = await stream.read(3)
+		const read_2 = await stream.read(2)
+		assertEquals(read_0, Uint8Array.of(0, 1))
+		assertEquals(read_1, undefined)
+		assertEquals(read_2, Uint8Array.of(2, 3))
+	})
+	await step("read transparently of original boundaries", async ({ step }) => {
+		const stream = new ByteStream()
+			.write(Uint8Array.of(0, 1))
+			.write([Uint8Array.of(2, 3)])
+			.write(new Blob([Uint8Array.of(4, 5)]))
+			.write(new Blob([Uint8Array.of(6, 7)]).stream())
+			.write(new Blob([Uint8Array.of(8, 9)]).arrayBuffer())
+			.write(new Blob([Uint8Array.of(10, 11, 12)]).stream())
+			.write(new Blob([Uint8Array.of(13, 14)]))
+			.write([Uint8Array.of(15, 16)].values())
+			.write(Promise.resolve([Uint8Array.of(17, 18)]))
+			.write(Promise.resolve([Uint8Array.of(19, 20), Uint8Array.of(21)]))
+			.write([])
+			.write()
+			.write([[], [Uint8Array.of(22, 23)]])
+			.terminate()
+		const read12_0 = await stream.read(12)
+		const read12_1 = await stream.read(12)
+		const read12_2 = await stream.read(12)
+		assertEquals(read12_0, Uint8Array.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11))
+		assertEquals(read12_1, Uint8Array.of(12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23))
+		assertEquals(read12_2, undefined)
+	})
+})
