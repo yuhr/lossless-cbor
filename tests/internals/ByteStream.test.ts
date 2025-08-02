@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: CC0-1.0
+
 import { ByteStream } from ".../internals/ByteStream.ts"
 import { assertEquals } from "@std/assert"
 
