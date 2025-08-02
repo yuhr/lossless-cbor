@@ -16,7 +16,7 @@ Deno.test("`diagnose`", async ({ step }) => {
 		const [entry] = Object.entries(pair)
 		const [diagnostic, encoded] = entry!
 		const decoded = await fromBytes(decodeHex(encoded), { allowEmpty: false })
-		const encodedRoundtrip = encodeHex(await (await toBytes(decoded)).bytes())
+		const encodedRoundtrip = encodeHex(await toBytes(decoded))
 		const diagnosticRoundtrip = await diagnose(decoded, {
 			asciiSafe: true,
 			encodingIndicator: { indefinite: true },
