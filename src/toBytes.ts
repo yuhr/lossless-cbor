@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
 import DataItem from "./DataItem.ts"
-import { toAdditionalFromArgument } from "./internals/toAdditionalFromArgument.ts"
+import { argumentToAdditional } from "./internals/argumentToAdditional.ts"
 
 /**
  * Encodes the data item into bytes.
@@ -73,7 +73,7 @@ const encodeDataItem = async (
 					const chunks = await Array.fromAsync(value.chunks)
 					const blob = new Blob(chunks.map(({ value }) => value))
 					const argument = BigInt(blob.size)
-					const additional = toAdditionalFromArgument(argument)
+					const additional = argumentToAdditional(argument)
 					await encodeHead(writer, Object.freeze({ majorType: 2, argument, additional }), options)
 					await writer.write(await blob.bytes())
 				} else {
@@ -92,7 +92,7 @@ const encodeDataItem = async (
 					const chunks = await Array.fromAsync(value.chunks)
 					const string = chunks.map(({ value }) => value).join("")
 					const argument = BigInt(string.length)
-					const additional = toAdditionalFromArgument(argument)
+					const additional = argumentToAdditional(argument)
 					const head: DataItem.Head = Object.freeze({ majorType: 3, argument, additional })
 					await encodeHead(writer, head, options)
 					await writer.write(textEncoder.encode(string))
@@ -112,7 +112,7 @@ const encodeDataItem = async (
 				if (deterministic) {
 					const elements = await Array.fromAsync(value.chunks)
 					const argument = BigInt(elements.length)
-					const additional = toAdditionalFromArgument(argument)
+					const additional = argumentToAdditional(argument)
 					const head: DataItem.Head = Object.freeze({ majorType: 4, argument, additional })
 					await encodeHead(writer, head, options)
 					for (const element of elements) await encodeDataItem(writer, element, options)
@@ -132,7 +132,7 @@ const encodeDataItem = async (
 					const sorter = sort === "length-first" ? sortPairsLengthFirst : sortPairsDefault
 					const pairs = await sorter(await Array.fromAsync(value.chunks))
 					const argument = BigInt(pairs.length)
-					const additional = toAdditionalFromArgument(argument)
+					const additional = argumentToAdditional(argument)
 					const head: DataItem.Head = Object.freeze({ majorType: 5, argument, additional })
 					await encodeHead(writer, head, options)
 					for (const [key, value] of pairs) {
