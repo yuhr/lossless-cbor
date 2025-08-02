@@ -1,0 +1,9 @@
+{
+	"lock": false,
+	"compilerOptions": {
+		"strict": true,
+		"exactOptionalPropertyTypes": true,
+		"noUncheckedIndexedAccess": true,
+		"noPropertyAccessFromIndexSignature": true
+	}
+}

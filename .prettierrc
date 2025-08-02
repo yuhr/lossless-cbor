@@ -1,0 +1,13 @@
+{
+	"useTabs": true,
+	"semi": false,
+	"trailingComma": "all",
+	"arrowParens": "avoid",
+	"proseWrap": "never",
+	"overrides": [
+		{
+			"files": ".*rc",
+			"options": { "parser": "json" }
+		}
+	]
+}

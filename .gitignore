@@ -1,0 +1,10 @@
+.*
+*.log
+node_modules
+
+!.git*
+!.*rc
+!.eslint
+!.editorconfig
+!.vscode
+!.tool-versions
