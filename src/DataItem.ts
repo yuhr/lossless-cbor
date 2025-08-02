@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MPL-2.0
 
+import { argumentToAdditional } from "./internals/argumentToAdditional.ts"
+
 const defineInternals = (object: object, properties: Record<PropertyKey, unknown>): object =>
 	Object.defineProperties(
 		object,
@@ -97,6 +99,16 @@ namespace DataItem {
 		Readonly<{ type: Number; value: Content }>
 	export type Simple = DataItem & Readonly<{ type: "simple" }>
 	export type Float = DataItem & Readonly<{ type: "float" }>
+
+	export const Tag = <Number extends bigint, Content extends DataItem = DataItem>(
+		number: Number,
+		content: Content,
+	): DataItem.Tag<Number, Content> =>
+		DataItem({
+			type: number,
+			value: content,
+			head: { majorType: 6, argument: number, additional: argumentToAdditional(number) },
+		})
 
 	export type Type = DataItem["type"]
 
