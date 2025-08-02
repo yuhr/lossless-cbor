@@ -8,19 +8,7 @@ import { argumentToAdditional } from "./internals/argumentToAdditional.ts"
  */
 const toBytes = async (dataItem: DataItem, options: toBytes.Options = {}): Promise<Uint8Array> => {
 	const { selfDescribed } = options
-	if (selfDescribed)
-		dataItem = DataItem({
-			type: 55799n as const,
-			value: dataItem,
-			head: Object.freeze({
-				majorType: 6,
-				argument: 55799n,
-				additional: Object.freeze({
-					information: 24 + 1 /* 2 bytes */,
-					bytes: new Blob([Uint8Array.of(0xd9, 0xf7) /* 55799 in bytes */]),
-				}),
-			}),
-		})
+	if (selfDescribed) dataItem = DataItem.Tag(55799n, dataItem)
 	const chunks: Uint8Array[] = []
 	const stream = new WritableStream<Uint8Array>({ write: async chunk => void chunks.push(chunk) })
 	const writer = stream.getWriter()
