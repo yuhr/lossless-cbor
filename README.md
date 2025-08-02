@@ -21,7 +21,7 @@ Supported CBOR features notable:
 
 There have been several libraries to work with CBOR in the world of TypeScript, but from what I've seen, _**all those are lossy**_, meaning they decode CBOR binaries into bare ECMAScript values. That is a lossy transformation by nature; numbers are all coerced to double-precision floats, the original order of map entries whose string keys can be interpreted as decimal natural numbers is broken, no support for maps with non-string keys, etc., and even no escape hatch against them is provided at worst.
 
-This library, on the other hand, doesn't decode into bare values directly, and instead decode into “data items” which are objects that preserves the semantics of the original CBOR representation. For example:
+This library, on the other hand, doesn't decode into bare values directly, and instead decode into “data items” which are objects that preserve the semantics of the original CBOR representation. For example:
 
 ```typescript
 import fromBytes from "https://deno.land/x/lossless_cbor/fromBytes.ts"
