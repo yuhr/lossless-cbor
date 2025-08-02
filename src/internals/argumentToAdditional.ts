@@ -3,10 +3,12 @@
 import { bigintToBlob } from "./bigintToBlob.ts"
 import type DataItem from "../DataItem.ts"
 
-const toAdditionalFromArgument = (argument: bigint | number): DataItem.Head.Additional => {
+const argumentToAdditional = (
+	argument: NonNullable<DataItem.Head.Argument>,
+): DataItem.Head.Additional => {
 	if (typeof argument === "bigint") {
 		if (argument < 0n) {
-			throw new Error("Data item argument less than 0 is invalid.")
+			throw new Error("Integers less than 0 are invalid as a Data item argument.")
 		} else if (argument < 24n) {
 			return Object.freeze({ information: Number(argument), bytes: new Blob([]) })
 		} else if (argument < (2n ** 8n) ** 1n) {
@@ -18,7 +20,7 @@ const toAdditionalFromArgument = (argument: bigint | number): DataItem.Head.Addi
 		} else if (argument < (2n ** 8n) ** 8n) {
 			return Object.freeze({ information: 27, bytes: bigintToBlob(argument) })
 		} else {
-			throw new Error("Data item argument greater than 2⁶⁴-1 is invalid.")
+			throw new Error("Integers greater than 2⁶⁴-1 is invalid as a Data item argument.")
 		}
 	} else {
 		if (Number.isNaN(argument))
@@ -50,5 +52,5 @@ export {
 	 * @private
 	 * @deprecated
 	 */
-	toAdditionalFromArgument,
+	argumentToAdditional,
 }

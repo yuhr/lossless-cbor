@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MPL-2.0
 
 import DataItem from "./DataItem.ts"
+import { argumentToAdditional } from "./internals/argumentToAdditional.ts"
 import { bigintToBlob } from "./internals/bigintToBlob.ts"
-import { toAdditionalFromArgument } from "./internals/toAdditionalFromArgument.ts"
 
 /**
  * Transforms the bare value into an object that represents a CBOR data item in the [preferred](https://www.rfc-editor.org/rfc/rfc8949.html#name-preferred-serialization) way.
@@ -75,7 +75,7 @@ fromValue.fromNumber = (async (value, options): Promise<DataItem.Float> => {
 		head: {
 			majorType: 7,
 			argument: value,
-			additional: toAdditionalFromArgument(value),
+			additional: argumentToAdditional(value),
 		},
 	})
 }) satisfies fromValue.Transformer<number>
@@ -97,7 +97,7 @@ fromValue.fromBigInt = (async (
 			head: {
 				majorType: negative ? 1 : 0,
 				argument,
-				additional: toAdditionalFromArgument(argument),
+				additional: argumentToAdditional(argument),
 			},
 		})
 	} else {
@@ -108,7 +108,7 @@ fromValue.fromBigInt = (async (
 			head: {
 				majorType: 6,
 				argument: type,
-				additional: toAdditionalFromArgument(type),
+				additional: argumentToAdditional(type),
 			},
 		})
 	}
@@ -122,7 +122,7 @@ fromValue.fromBlob = (async (blob: Blob, options): Promise<DataItem.ByteString> 
 		head: {
 			majorType: 2,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 }) satisfies fromValue.Transformer<Blob>
@@ -150,7 +150,7 @@ objectTransformersDefault.set(null, async (object: object, options): Promise<Dat
 		head: {
 			majorType: 5,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 })
@@ -188,7 +188,7 @@ objectTransformersDefault.set(Array.prototype, async (object: unknown[], options
 		head: {
 			majorType: 4,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 })
@@ -209,7 +209,7 @@ objectTransformersDefault.set(Set.prototype, async (object: Set<unknown>, option
 		head: {
 			majorType: 5,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 })
@@ -230,7 +230,7 @@ objectTransformersDefault.set(Map.prototype, async (object: Map<unknown, unknown
 		head: {
 			majorType: 5,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 })
@@ -257,7 +257,7 @@ objectTransformersDefault.set(Date.prototype, async (object: Date, options) => {
 			head: {
 				majorType: 6,
 				argument: type,
-				additional: toAdditionalFromArgument(type),
+				additional: argumentToAdditional(type),
 			},
 		})
 	} else {
@@ -269,7 +269,7 @@ objectTransformersDefault.set(Date.prototype, async (object: Date, options) => {
 			head: {
 				majorType: 6,
 				argument: type,
-				additional: toAdditionalFromArgument(type),
+				additional: argumentToAdditional(type),
 			},
 		})
 	}
@@ -310,7 +310,7 @@ fromValue.fromString = (async (value, options) => {
 		head: {
 			majorType: 3,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 }) satisfies fromValue.Transformer<string>
@@ -323,7 +323,7 @@ fromValue.fromBoolean = (async (value, options) => {
 		head: {
 			majorType: 7,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 }) satisfies fromValue.Transformer<boolean>
@@ -336,7 +336,7 @@ fromValue.fromNull = (async (value, options) => {
 		head: {
 			majorType: 7,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 }) satisfies fromValue.Transformer<null>
@@ -349,7 +349,7 @@ fromValue.fromUndefined = (async (value, options) => {
 		head: {
 			majorType: 7,
 			argument,
-			additional: toAdditionalFromArgument(argument),
+			additional: argumentToAdditional(argument),
 		},
 	})
 }) satisfies fromValue.Transformer<undefined>
