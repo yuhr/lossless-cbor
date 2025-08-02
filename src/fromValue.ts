@@ -362,6 +362,14 @@ fromValue.fromFunction = (async (value, options = {}) => {
 	return fromValue.fromObject(value, options)
 }) satisfies fromValue.Transformer<Function>
 
+fromValue.tag = <Number extends bigint>(number: Number) =>
+	(async (value, options = {}) =>
+		DataItem({
+			type: number,
+			value: await fromValue(value, options),
+			head: { majorType: 6, argument: number, additional: argumentToAdditional(number) },
+		})) satisfies fromValue.Transformer<unknown>
+
 const transformersDefault = new Map<Type, fromValue.Transformer>([
 	["number", fromValue.fromNumber],
 	["bigint", fromValue.fromBigInt],
