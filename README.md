@@ -17,9 +17,9 @@ Supported CBOR features notable:
 
 `lossless-cbor` is meant to be a reference implementation of CBOR in TypeScript (i.e. a type-safe alternative of [`cbor-object`](https://www.npmjs.com/package/cbor-object)).
 
-## Why another CBOR library
+## Why Another CBOR Library
 
-There have been several libraries to work with CBOR in the world of TypeScript, but from what I've seen, _**all those are lossy**_, meaning they decode CBOR binaries into bare ECMAScript values. That is a lossy transformation by nature; numbers are all coerced to double-precision floats, the original order of map entries whose string keys can be interpreted as decimal natural numbers is broken, no support for maps with non-string keys, etc., and even no escape hatch against them is provided at worst.
+There have been several libraries to work with CBOR in the world of TypeScript, but from what I've seen, _**all those are lossy**_, meaning they decode CBOR binaries immediately into bare TypeScript values. That is a lossy transformation by nature; numbers are all coerced to double-precision floats, the original order of map entries whose string keys can be interpreted as decimal natural numbers is broken, no support for maps with non-string keys, etc., and even no escape hatch against them is provided at worst.
 
 This library, on the other hand, doesn't decode into bare values directly, and instead decode into “data items” which are objects that preserve the semantics of the original CBOR representation. For example:
 
@@ -54,7 +54,7 @@ The modules under the [`./src/`](./src/) directory are also accessible under [`h
 
 ### API Overview
 
-`DataItem` is the interface between CBOR binaries and TypeScript values.
+`DataItem` is the interface between CBOR binaries and bare TypeScript values.
 
 ```mermaid
 ---
@@ -82,8 +82,10 @@ graph LR
 	V0((unknown))
 	V1((string))
 	D -->|diagnose| V1
+	B0 -->|decode| V0
 	B0 -->|fromBytes| D -->|toValue| V0
 	V0 -->|fromValue| D -->|toBytes| B1
+	V0 -->|encode| B1
 ```
 
 ## SemVer Policy
