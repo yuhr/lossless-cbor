@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MPL-2.0
+
 import type ByteSource from "./ByteSource.ts"
 import fromBytes from "./fromBytes.ts"
 import toValue from "./toValue.ts"
