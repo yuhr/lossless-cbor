@@ -8,3 +8,6 @@ node_modules
 !.editorconfig
 !.vscode
 !.tool-versions
+
+npm
+jsr.json
