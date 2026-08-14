@@ -9,3 +9,6 @@ setup:
 
 test *ARGS:
 	deno test --config tests/deno.json --allow-read {{ARGS}}
+
+build VERSION:
+	deno run -A buildNpm.ts {{VERSION}}
