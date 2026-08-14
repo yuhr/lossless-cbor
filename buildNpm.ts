@@ -47,7 +47,7 @@ const jsrJson = {
 	version: Deno.args[0],
 	license: "MPL-2.0",
 	exports: Object.fromEntries(
-		entryPoints.map(entry => [entry.name === "./index" ? "." : entry.name, "./" + entry.path]),
+		entryPoints.map(entry => [entry.name === "./index" ? "." : entry.name, entry.path]),
 	),
 	publish: {
 		include: ["LICENSE", "README.md", "src/**/*.ts"],
